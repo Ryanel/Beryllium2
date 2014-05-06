@@ -90,7 +90,7 @@ Allocates multple pages and returns a pointer to the first page.
 This function IS meant to be directly called, as this is locked by the mutex mmac_lock.
 Please don't call memory_mult_alloc_pages() instead.
 **/
-void* memory_alloc_pages(int pages)
+void* memallocp(int pages)
 {
 	void *ptr = NULL;
 	if(pages <= 0)
@@ -102,7 +102,7 @@ void* memory_alloc_pages(int pages)
 	ptr = memory_mult_alloc_pages(pages);
 	if ( ptr == NULL )
 	{
-		klog(LOG_INFO,"mem_alloc_pages","System ran out of free pages! Halting!\n",mem_lastpage); halt();
+		klog(LOG_INFO,"memallocp","System ran out of free pages! Halting!\n",mem_lastpage); halt();
 	}
 		
 	mutex_unlock(mmac_lock);
@@ -131,17 +131,13 @@ void memory_dealloc_pages(int pages)
 }
 /**
 Initializes Memory
-
 Specificallly, it locks memory, initialises mem_lastpage, and allocates the kernel_reserved_area.
 **/
 void memory_init()
 {
 	mutex_init(mmac_lock);
-	mutex_lock(mmac_lock);
 	mem_lastpage = pa_first_frame() * 0x1000;
-	mutex_unlock(mmac_lock);
-	kernel_reserved_area = memory_alloc_pages(1);
-	//memman_init();
+	memman_init();
 }
 /**
 Allocates amount bytes, and returns a pointer to the beginning of the allocated amount.
@@ -158,7 +154,7 @@ void *sbrk(size_t amount)
 		actual_amount++;
 	}
 	//printf("sbrk: allocating %d pages to cover 0x%X bytes\n",actual_amount,amount);
-	void *tmp = memory_alloc_pages(actual_amount);
+	void *tmp = memallocp(actual_amount);
 	return tmp;
 }
 /**

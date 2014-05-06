@@ -7,10 +7,8 @@
 #include <types.h>
 #include <string.h>
 #include <stdlib.h>
-#include <x86/paging.h>
-#include <x86/page_allocator.h>
-#include <x86/lib/placement_malloc.h>
 #include <beryllium/memory.h>
+#include <log.h>
 #define PAGE_SIZE 0x1000
 #define DEBUG 1
 typedef struct mman_region {
@@ -36,6 +34,7 @@ uint8_t mman_status = 0;
 **/
 int memsig(uintptr_t start, size_t size, uint8_t type, uint8_t flags)
 {
+	klog(LOG_DEBUG,"memsig","Creating memory region 0x%X-0x%X...\n",start,start+size);
 	if(size == 0)
 	{
 		printf("memsig: size is 0!\n");
@@ -94,9 +93,8 @@ int memsig(uintptr_t start, size_t size, uint8_t type, uint8_t flags)
 **/
 int memresize(mman_region_t * region, size_t size)
 {
-	printf("Recalculating new size for region 0x%X... ",region->start);
+	klog(LOG_DEBUG,"memresize","Resizing 0x%X - 0x%X to 0x%X bytes\n",region->start,region->start + region->size,size);
 	unsigned int addr_size_new = size + region->start;
-	printf("0x%08X\n",addr_size_new);
 	mman_region_t * parent_ptr = mman_region;
 	while (1)
 	{
@@ -114,6 +112,7 @@ int memresize(mman_region_t * region, size_t size)
 			{
 				if(parent_ptr->start < addr_size_new)
 				{
+					klog(LOG_DEBUG,"memresize","Resizing 0x%X - 0x%X failed: EMEMBOUNDRY\n",region->start,region->start + region->size);
 					return 1;
 				}
 			}
@@ -121,7 +120,7 @@ int memresize(mman_region_t * region, size_t size)
 		if(parent_ptr->next == NULL)
 		{
 			//We didn't find an offending region
-			region->size = addr_size_new; //Commit changes
+			region->size = size; //Commit changes
 			break;
 		}
 		parent_ptr = parent_ptr->next;
@@ -129,7 +128,44 @@ int memresize(mman_region_t * region, size_t size)
 	return 0;
 }
 
+mman_region_t * get_kernel_heap()
+{
+	mman_region_t * parent_ptr = mman_region;
+	while (1)
+	{
+		if(parent_ptr == NULL) // If this n
+		{
+			return NULL;
+		}
+		else
+		{
+			if(parent_ptr->type == 0x1)
+			{
+				return parent_ptr;
+			}
+		}
+		parent_ptr = parent_ptr->next;
+	}
+}
+
 extern uint32_t _end;
+
+void *mem_heap_sbrk(size_t amount) //This is the kernel's sbrk
+{
+	mman_region_t * heap = get_kernel_heap();
+	if(amount == 0)
+	{
+		return (void*)(heap->start + heap->size);
+	}
+	uint32_t actual_amount = (amount / 0x1000);
+	if(actual_amount == 0)
+	{
+		actual_amount++;
+	}
+	printf("sbrk: allocating %d pages to cover 0x%X bytes\n",actual_amount,amount);
+	void *tmp =  memallocp(actual_amount);
+	return tmp;
+}
 
 /**
  * Initialize the memory manager. Refrain from using memsig & malloc
@@ -140,7 +176,7 @@ void memman_init()
 	memset(mman_prealloc,0,sizeof(mman_region_t) * 0xFF);
 	mman_region = &mman_prealloc[0]; //Assign it to the first preallocated block
 	mman_status = 1;
-	memsig(0x100000, (uintptr_t)&_end, 0x0, 0x21); // Kernel - to protect it
-	memsig((uintptr_t)&_end,0x1000000, 0x1, 0x21); // Kernel heap
-	memsig(0x150000, 0x100000, 0x6, 0x1);
+	memsig(0x0, (uintptr_t)&_end, 0x0, 0x21); // Kernel - to protect it
+	memsig((((uintptr_t)&_end / 0x1000) * 0x1000) + 0x1000,0x100000, 0x1, 0x21); // Kernel heap
+	mem_heap_sbrk(0x1000);
 }
