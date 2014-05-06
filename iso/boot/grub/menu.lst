@@ -1,0 +1,5 @@
+default=0
+timeout=30
+title Beryllium (Kernel)
+kernel /kernel.elf
+module /boot/symbols.mod
