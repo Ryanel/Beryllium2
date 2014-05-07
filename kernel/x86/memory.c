@@ -41,7 +41,7 @@ Please use memory_alloc_pages() instead.
 
 void memory_set_total(uint32_t ram)
 {
-	mem_pagefree = ram;
+	//mem_pagefree = ram;
 }
 
 void* memory_mult_alloc_pages(int pages)
