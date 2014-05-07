@@ -56,7 +56,7 @@ void kmain()
 	}
 	if(!shell)
 	{
-		klog(LOG_PANIC,"kmain","No avalable shells to launch\n");
+		klog(LOG_PANIC,"kmain","Init not found -- Spinning\n");
 	}
 	while(true)
 	{

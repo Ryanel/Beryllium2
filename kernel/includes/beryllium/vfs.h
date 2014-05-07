@@ -49,6 +49,7 @@ typedef struct vfs_node{
 	uint32_t length;
 	uint32_t device; ///Internal device number
 	uint32_t device_type;
+	//File Functions
 	read_type_t read;
 	write_type_t write;
 	open_type_t open;
@@ -73,11 +74,12 @@ uint32_t read_vfs(vfs_node_t *node, uint32_t offset, uint32_t size, uint8_t *buf
 uint32_t write_vfs(vfs_node_t *node, uint32_t offset, uint32_t size, uint8_t *buffer);
 void open_vfs(vfs_node_t *node, unsigned int flags);
 void close_vfs(vfs_node_t *node);
-char *canonicalize_path(char *cwd, char *input);
 
+char *canonicalize_path(char *cwd, char *input);
 vfs_node_t *kopen(char *filename, uint32_t flags);
 int vfs_mount(char * path, vfs_node_t * local_root);
 vfs_node_t *get_mount_point(char * path, unsigned int path_depth, char **outpath, unsigned int * outdepth);
 int create_file_vfs(char *name, uint16_t permission);
 void vfs_print_tree_node(tree_node_t * node, size_t height);
+
 #endif
