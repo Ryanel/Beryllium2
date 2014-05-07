@@ -205,7 +205,7 @@ uint32_t device_start(device_t * dev)
 		return 0xFFFFFFFE;
 	}
 	//mutex_lock(dev->mutex);
-	int ret = 0 ;// dev->driver->start();
+	int ret = dev->driver->start();
 	if(ret == 0)
 	{
 		dev->status = DEVICE_STATUS_ONLINE;

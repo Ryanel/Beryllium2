@@ -36,9 +36,9 @@ void kmain()
 {
 	klog(LOG_INFO,"kmain","Booted into kernel proper.\n");
 	
-	//Start 
+	//Start
+	vfs_init(); 
 	device_manager_start();
-	vfs_init();
 	timing_init();
 	init_vfs_devices();
 	wd_init();
