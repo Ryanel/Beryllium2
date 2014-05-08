@@ -35,4 +35,5 @@ libiconv*
 *.mod
 *.map
 
+initutil
 *.log

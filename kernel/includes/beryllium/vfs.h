@@ -61,10 +61,10 @@ typedef struct vfs_node{
 	struct vfs_node *ptr; // Used by mountpoints and symlinks.
 } vfs_node_t;
 
-struct vfs_entry {
+typedef struct vfs_entry {
 	char * name;
 	vfs_node_t * file;
-};
+} vfs_entry_t;
 
 vfs_node_t* vfs_getRootNode();
 void vfs_printnode(vfs_node_t *node);

@@ -125,7 +125,6 @@ int create_file_vfs(char *name, uint16_t permission)
 	}
 	
 	if (parent->create) {
-		
 		parent->create(parent, f_path, permission);
 	}
 	else
