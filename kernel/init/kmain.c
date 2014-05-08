@@ -43,6 +43,15 @@ void kmain()
 	init_vfs_devices();
 	wd_init();
 	klog(LOG_INFO,"kmain","Kernel took %dms to become fully operational!\n",timer_getHi());
+	
+	if(!boottime_module_added())
+	{
+		klog(LOG_WARN,"kmain","No modules to load\n");
+	}
+	else
+	{
+		klog(LOG_INFO,"kmain","%d modules to be loaded\n",boottime_module_added());
+	}
 	//Launch a shell
 	vfs_node_t * shell = 0;
 	for(int i = 0; i!= total_shells; i++)
@@ -50,7 +59,7 @@ void kmain()
 		shell = kopen(shells[i],0);
 		if(!shell)
 		{
-			klog(LOG_WARN,"kmain","Can't launch %s: Executable not found\n",shells[i]);
+			klog(LOG_WARN,"kopen","Can't launch %s: Executable not found\n",shells[i]);
 		}
 		else { break; }
 	}

@@ -53,6 +53,7 @@ void x86_early(int magic,struct multiboot *mboot)
 	}
 	//Set kernel properties from multiboot info.
 	//klog(LOG_INFO,"MBT","%d modules loaded with kernel\n",mboot->mods_count);
+	boottime_module_set(mboot->mods_count);
 	klog(LOG_INFO,"x86_early","System has %dMB of ram avalable\n",mboot->mem_upper / 1024);
 	memory_set_total(mboot->mem_upper * 0x1000);
 	asm("cli");
@@ -65,6 +66,8 @@ void x86_early(int magic,struct multiboot *mboot)
 	paging_init();
 	asm("sti");
 	memory_init();
+	//Populate Modules List
+	modloader_init();
 	pit_init();
 	kmain();
 }
