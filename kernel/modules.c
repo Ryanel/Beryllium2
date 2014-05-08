@@ -3,27 +3,18 @@
 int boot_modules = 0;
 
 typedef struct {
-	int add;
-	int y;
+	int test;
 } module_raw_t;
 
-list_t * modules_preload;
+list_t * modules;
 
-int boottime_module_added()
+void module_add_raw(module_raw_t * module)
 {
-	return boot_modules;
+	list_insert(modules, module);
 }
 
-void boottime_module_set(int mods)
-{
-	boot_modules = mods;
-}
-
-void boottime_module_add()
-{
-}
 void modloader_init()
 {
 	klog(LOG_INFO,"modloader_init","Initialising...\n");
-	modules_preload = list_create();
+	modules = list_create();
 }

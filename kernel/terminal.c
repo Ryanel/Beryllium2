@@ -81,9 +81,19 @@ void terminal_clear()
 ///
 void terminal_init()
 {
+#ifdef X86
+	unsigned short offset;
+	outb(0x3D4, 14);
+	offset = inb(0x3D5) << 8;
+	outb(0x3D4, 15);
+	offset |= inb(0x3D5);
+	term_x=offset%80;
+	term_y=offset/80;
+	#else
 	term_x = 0;
 	term_y = 0;
 	terminal_clear();
+	#endif
 	video_setcursor(term_x,term_y);
 	//terminal_clear();
 }

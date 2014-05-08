@@ -44,14 +44,8 @@ void kmain()
 	wd_init();
 	klog(LOG_INFO,"kmain","Kernel took %dms to become fully operational!\n",timer_getHi());
 	
-	if(!boottime_module_added())
-	{
-		klog(LOG_WARN,"kmain","No modules to load\n");
-	}
-	else
-	{
-		klog(LOG_INFO,"kmain","%d modules to be loaded\n",boottime_module_added());
-	}
+	initrd_init();
+	
 	//Launch a shell
 	vfs_node_t * shell = 0;
 	for(int i = 0; i!= total_shells; i++)

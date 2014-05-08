@@ -2,4 +2,4 @@ default=0
 timeout=30
 title Beryllium (Kernel)
 kernel /kernel.elf
-module /boot/main.mod
+module /boot/initrd.img
