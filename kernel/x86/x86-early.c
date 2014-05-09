@@ -62,7 +62,6 @@ void x86_early(int magic,multiboot_info_t *mboot)
 		multiboot_mod_t * mod = (multiboot_mod_t*) mboot->mods_addr;
 		uint32_t module_start = mod->mod_start;
 		uint32_t module_end = mod->mod_end;
-		printf("%s:0x%X - 0x%X\n",mod->cmdline,module_start, module_end);
 		initrd_set_location(module_start, module_end);
 		placement_address = module_end;
 	}

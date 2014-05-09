@@ -26,9 +26,6 @@ void kshell_parse_char(char);
 char kb_read();
 void device_manager_start();
 
-int total_shells = 4;
-char * shells[4]={"/bin/init","/sbin/init","/usr/bin/init","/xbin/init"};
-
 /**
 Kernel main function
 **/
@@ -46,20 +43,16 @@ void kmain()
 	
 	initrd_init();
 	
-	//Launch a shell
-	vfs_node_t * shell = 0;
-	for(int i = 0; i!= total_shells; i++)
+	vfs_node_t * root = kopen("/",0);
+	int i = 0;
+	if(root->finddir)
 	{
-		shell = kopen(shells[i],0);
-		if(!shell)
+		struct dirent *node = 0;
+		while((node = readdir_vfs(root, i)) != 0)
 		{
-			klog(LOG_WARN,"kopen","Can't launch %s: Executable not found\n",shells[i]);
+			printf("%d\n");
+			i++;
 		}
-		else { break; }
-	}
-	if(!shell)
-	{
-		klog(LOG_PANIC,"kmain","Init not found -- Spinning\n");
 	}
 	while(true)
 	{

@@ -23,11 +23,11 @@
 #define PATH_DOT "."
 struct vfs_node;
 extern tree_t     *vfs_tree;
-struct dirent // One of these is returned by the readdir call, according to POSIX.
+typedef struct dirent // One of these is returned by the readdir call, according to POSIX.
 {
   char name[128]; // Filename.
   uint32_t ino;     // Inode number. Required by POSIX.
-};
+} vfs_dirent_t;
 
 typedef uint32_t (*read_type_t) (struct vfs_node *, uint32_t, uint32_t, uint8_t *);
 typedef uint32_t (*write_type_t) (struct vfs_node *, uint32_t, uint32_t, uint8_t *);

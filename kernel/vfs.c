@@ -91,6 +91,7 @@ vfs_node_t *finddir_vfs(vfs_node_t *node, char *name)
 	} 
 	else
 	{
+		printf("finddir not supported\n");
 		return (vfs_node_t *)NULL;
 	}
 }
@@ -415,7 +416,7 @@ vfs_node_t *kopen(char *filename, uint32_t flags) {
 		return NULL;
 	}
 
-	//klog(LOG_INFO,"VFS", "kopen(%s)\n", filename);
+	klog(LOG_INFO,"kopen", "Opening %s\n", filename);
 
 	/* Reference the current working directory */
 	char *cwd = "/";

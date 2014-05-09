@@ -4,6 +4,8 @@
 #include <beryllium/fs/initfs.h>
 #include <beryllium/vfs.h>
 #include <lib/tree.h>
+#include <string.h>
+#include <stdlib.h>
 uint32_t initrd_exists = 0;
 uint32_t initrd_startaddr = 0;
 uint32_t initrd_endaddr = 0;
@@ -13,12 +15,38 @@ fileheader_t  * initfs_fileheaders;
 
 vfs_node_t  * initrd_mountpoint;
 vfs_node_t  * initrd_nodes;
-vfs_entry_t * initrd_entries;
 void initrd_set_location(uint32_t start, uint32_t end)
 {
 	initrd_startaddr	= start;
 	initrd_endaddr		= end;
 	initrd_exists		= 1;
+}
+
+
+vfs_dirent_t * initrd_readdir(vfs_node_t *node, uint32_t index)
+{
+	printf("readdir\n");
+	vfs_dirent_t * dirent = malloc(sizeof(vfs_dirent_t));
+	if (index >= initfs_header->headers)
+		return 0;
+	printf("found\n");
+	strcpy(dirent->name, initrd_nodes[index].name);
+	dirent->name[strlen(initrd_nodes[index].name)] = 0; // Make sure the string is NULL-terminated.
+	dirent->ino = initrd_nodes[index].inode;
+	return dirent;
+}
+
+vfs_node_t * initrd_finddir(vfs_node_t *node,const char *name)
+{
+	for(unsigned int i = 0; i < initfs_header->headers; i++)
+	{
+		printf("initrd: searching for %s\n",name);
+		if(!strcmp(name, (const char *)initrd_nodes[i].name))
+		{
+			return &initrd_nodes[i];
+		}
+	}
+	return NULL;
 }
 
 int initrd_verify(uint32_t * addr) //TODO: Do actual error checking
@@ -47,19 +75,17 @@ void initrd_init() //FIXME: All return same name
 	
 	initrd_mountpoint = malloc(sizeof(vfs_node_t));
 	memset(initrd_mountpoint, 0x00, sizeof(vfs_node_t));
-	strcpy(initrd_mountpoint->name, "ramdisk");
+	strcpy(initrd_mountpoint->name, "ramdisk0");
 	initrd_mountpoint->uid = 0;
 	initrd_mountpoint->gid = 0;
 	initrd_mountpoint->permissions = VFS_PERMISSION_READ;
-	initrd_mountpoint->flags   = VFS_DIRECTORY;
-	initrd_mountpoint->readdir = NULL;
-	initrd_mountpoint->finddir = NULL;
+	initrd_mountpoint->flags   = VFS_DIRECTORY | VFS_MOUNTPOINT;
+	initrd_mountpoint->readdir = &initrd_readdir;
+	initrd_mountpoint->finddir = &initrd_finddir;
 	
 	initrd_nodes = (vfs_node_t*)malloc(sizeof(vfs_node_t) * initfs_header->headers);
-	
-	initrd_entries = (vfs_entry_t*)malloc(sizeof(vfs_entry_t) * initfs_header->headers);
-	
-	for (int i = 0; i < initfs_header->headers; i++)
+
+	for (unsigned int i = 0; i < initfs_header->headers; i++)
 	{
 		// Edit the file's header - currently it holds the file offset
 		// relative to the start of the ramdisk. We want it relative to the start
@@ -70,21 +96,13 @@ void initrd_init() //FIXME: All return same name
 		initrd_nodes[i].length = initfs_fileheaders[i].length;
 		initrd_nodes[i].inode = i;
 		initrd_nodes[i].flags = VFS_FILE;
-		initrd_nodes[i].read = 0;//&initrd_read;
+		initrd_nodes[i].read = 0; //TODO:IMPLEMENT
 		initrd_nodes[i].write = 0;
 		initrd_nodes[i].readdir = 0;
 		initrd_nodes[i].finddir = 0;
 		initrd_nodes[i].open = 0;
 		initrd_nodes[i].close = 0;
-		initrd_entries[i].file = &initrd_nodes[i];
-		strcpy(initrd_entries[i].name, &initfs_fileheaders[i].name);
-		tree_node_insert_child(vfs_tree, vfs_tree->root, &initrd_entries[i]); //Insert the node into the tree
-		
-		printf("Created file /%s\n",initrd_entries[i].name);
 		
 	} 
-	
-	vfs_mount("/",initrd_mountpoint);
-	vfs_print_tree_node(vfs_tree->root, 0);
 	 
 }
