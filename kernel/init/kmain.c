@@ -34,6 +34,7 @@ void kmain()
 	klog(LOG_INFO,"kmain","Booted into kernel proper.\n");
 	
 	//Start
+	klog(LOG_INFO,"kmain","Starting VFS\n");
 	vfs_init(); 
 	device_manager_start();
 	timing_init();
@@ -43,17 +44,13 @@ void kmain()
 	
 	initrd_init();
 	
-	vfs_node_t * root = kopen("/",0);
-	int i = 0;
-	if(root->finddir)
+	vfs_node_t * serial_device = kopen("/dev/serial0",0);
+	if(serial_device)
 	{
-		struct dirent *node = 0;
-		while((node = readdir_vfs(root, i)) != 0)
-		{
-			printf("%d\n");
-			i++;
-		}
+		write_vfs(serial_device, 0, strlen( "/dev/serial0: Writing to COM1 for test.\n"), "/dev/serial0: Writing to COM1 for test.\n");
 	}
+	
+	klog(LOG_PANIC,"init","No init found. Dropping login\n");
 	while(true)
 	{
 		wd_notify(WD_NOTIFY_KMAIN);

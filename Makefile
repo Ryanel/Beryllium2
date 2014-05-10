@@ -78,14 +78,13 @@ kernel: arch-boot boot lib drivers arch-files arch-low arch-lib arch-drivers fs 
 	@${CPP} -c ${CPP_OPTIONS} ${COMPILE_OPTIONS} -I${INCLUDE_DIR} -o $@ $<
 
 clean: prep-dist
-	@-rm -rf kernel/*.o kernel/boot/*.o kernel/lib/*.o kernel/drivers/*.o kernel/fs/*.o ${ARCH_DIRECTORY}/*.o ${ARCH_DIRECTORY}/boot/*.o ${ARCH_DIRECTORY}/drivers/*.o ${ARCH_DIRECTORY}/lib/*.o ${ARCH_DIRECTORY}/low/*.o
+	@-rm -rf kernel/*.o kernel/init/*.o kernel/lib/*.o kernel/drivers/*.o kernel/fs/*.o ${ARCH_DIRECTORY}/*.o ${ARCH_DIRECTORY}/init/*.o ${ARCH_DIRECTORY}/drivers/*.o ${ARCH_DIRECTORY}/lib/*.o ${ARCH_DIRECTORY}/low/*.o
 	@-rm -rf util/*.o util/*.bin
 
 prep-dist:
 	@-rm -rf *~ boot/*~ kernel/*~
 
 run:
-	#@echo "Remember! Use make run to test the kernel! Implement it into a OS if you wish to test other fuctions!"
 	@qemu-system-i386 -serial stdio -cdrom ${BUILD_DIRECTORY}/cdrom.iso -m 16
 
 iso:
