@@ -162,7 +162,6 @@ void *mem_heap_sbrk(size_t amount) //This is the kernel's sbrk
 	{
 		actual_amount++;
 	}
-	printf("sbrk: allocating %d pages to cover 0x%X bytes\n",actual_amount,amount);
 	void *tmp =  memallocp(actual_amount);
 	return tmp;
 }
@@ -178,5 +177,4 @@ void memman_init()
 	mman_status = 1;
 	memsig(0x0, (uintptr_t)&_end, 0x0, 0x21); // Kernel - to protect it
 	memsig((((uintptr_t)&_end / 0x1000) * 0x1000) + 0x1000,0x100000, 0x1, 0x21); // Kernel heap
-	mem_heap_sbrk(0x1000);
 }
