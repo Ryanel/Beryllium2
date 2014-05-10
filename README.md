@@ -23,6 +23,7 @@ On Boot
 * Sets up high level stuff
 * Attempts to find /bin/init, /sbin/init, etc...
 * Runs init
+
 Branches ([top](#btop))
 ---------
 + master: Stable production safe code is stored here.
