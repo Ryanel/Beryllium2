@@ -10,6 +10,10 @@ thread_t * kmain_thread;
 void thread_exit()
 {
 	klog(LOG_WARN,"thread_exit","Thread exiting!\n");
+	while(true)
+	{
+		
+	}
 }
 
 thread_t * thread_create(uint8_t level,uint32_t pid, int (*fn)(void*))
@@ -19,13 +23,14 @@ thread_t * thread_create(uint8_t level,uint32_t pid, int (*fn)(void*))
 	thread->tid = thread_id++;
 	thread->level = level;
 	thread->owner_pid = pid;
-	thread->stack = malloc(THREAD_STACKSIZE);
-	thread->stack_size = THREAD_STACKSIZE;
-	*--thread->stack = (uint32_t)&thread_exit; // Fake return address.
-	*--thread->stack = (uint32_t)fn;
-	*--thread->stack = 0; // Fake EBP.
-	thread->ebp = (uint32_t)thread->stack;
-	thread->esp = (uint32_t)thread->stack;
+	thread->stack = malloc(0x1000);
+	uint32_t * stack_ptr = thread->stack + 0x500;
+	*--stack_ptr = (uint32_t)&thread_exit; // Fake return address.
+	*--stack_ptr = (uint32_t)&fn;
+	*--stack_ptr = 0; // Fake EBP.
+
+	thread->ebp = (uint32_t)stack_ptr;
+	thread->esp = (uint32_t)stack_ptr;
 	return thread;
 }
 

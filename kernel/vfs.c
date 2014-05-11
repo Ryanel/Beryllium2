@@ -20,7 +20,7 @@ void vfs_init()
 	vfs_root->name = strdup("[root]");
 	vfs_root->file =  NULL;
 	tree_set_root(vfs_tree, vfs_root);
-	return 0;
+	//return 0;
 }
 
 uint32_t read_vfs(vfs_node_t *node, uint32_t offset, uint32_t size, uint8_t *buffer) 

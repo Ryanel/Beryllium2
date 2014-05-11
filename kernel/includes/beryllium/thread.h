@@ -14,7 +14,7 @@ typedef volatile struct
 	uint8_t level; /// Follows x86 Rings
 	uint32_t owner_pid;
 	uint32_t * stack;
-	uint32_t stack_size;
+	uint32_t * stack_ptr;
 	uint32_t status;
 	//State Variables
 	uint32_t ebp, esp, esi, edi;

@@ -30,7 +30,6 @@ static Meta tail = {0, 0, &head, NULL};
 size_t alloc_end = 0;  // track amount of the heap we have used
 
 void* malloc(size_t size) {
-	printf("Allocating %d bytes\n");
   // long word align
   if (size%sizeof(size_t) != 0) {
     size += sizeof(size_t) - (size%sizeof(size_t));
@@ -70,7 +69,6 @@ void* malloc(size_t size) {
       return ((Meta*) block) + 1;   
     }
   }
-  printf("Adding new node...\n");
   // if we made it here, must add a new node!
  
   // on first run, find initial head addr

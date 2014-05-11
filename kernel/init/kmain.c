@@ -50,10 +50,10 @@ void kmain()
 	klog(LOG_INFO,"kmain","Kernel took %dms to become fully operational!\n",timer_getHi());
 	
 	initrd_init();
-	thread_t * kernel = threading_start();
-	scheduler_init(kernel);
+	threading_start();
 	thread_t * test = thread_create(0,0, hello);
-	scheduler_add_thread(test);
+	scheduler_init(test);
+	
 	klog(LOG_PANIC,"init","No init found. Dropping login\n");
 	while(true)
 	{
