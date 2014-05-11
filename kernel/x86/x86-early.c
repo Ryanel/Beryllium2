@@ -50,12 +50,22 @@ void x86_early(int magic,multiboot_info_t *mboot)
 	
 	if(magic!=0x2BADB002)
 	{
-		klog(LOG_PANIC,"x86_early","Multiboot magic verfication failed\n",magic);
+		klog(LOG_PANIC,"multiboot","Multiboot magic verfication failed\n",magic);
+		klog(LOG_PANIC,"multiboot","+------------------------+\n");
+		klog(LOG_PANIC,"multiboot","|Reciept for: Multiboot  |\n");
+		klog(LOG_PANIC,"multiboot","|Magic: 0x%-015X|\n",magic);
+		klog(LOG_PANIC,"multiboot","|Bootloader:%-13s|\n",mboot->boot_loader_name);
+		klog(LOG_PANIC,"multiboot","+------------------------+\n");
 		return;
 	}
+	else
+	{
+		klog(LOG_INFO,"multiboot","Verification passed\n");
+		klog(LOG_INFO,"multiboot","Booted by %s\n",mboot->boot_loader_name);
+		klog(LOG_INFO,"multiboot","System has %d MB of ram avalable\n",mboot->mem_upper / 1024);
+	}
 	//Multiboot verified, we can do things
-	//klog(LOG_INFO,"x86_early","Booted by %s\n",mboot->boot_loader_name);
-	klog(LOG_INFO,"x86_early","System has %d MB of ram avalable\n",mboot->mem_upper / 1024);
+	
 	memory_set_total(mboot->mem_upper * 0x1000);
 	if(mboot->mods_count)
 	{
