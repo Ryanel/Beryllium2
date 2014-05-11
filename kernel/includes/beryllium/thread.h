@@ -17,7 +17,8 @@ typedef volatile struct
 	uint32_t stack_size;
 	uint32_t status;
 	//State Variables
-	uint32_t ebp, esp, ebx, esi, edi;
+	uint32_t ebp, esp, esi, edi;
+	uint32_t eax, ebx, ecx, edx;
 	
 } thread_t;
 

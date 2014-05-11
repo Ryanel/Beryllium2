@@ -10,7 +10,6 @@ thread_t * kmain_thread;
 void thread_exit()
 {
 	klog(LOG_WARN,"thread_exit","Thread exiting!\n");
-	thread_switchkernel();
 }
 
 thread_t * thread_create(uint8_t level,uint32_t pid, int (*fn)(void*))
@@ -35,9 +34,7 @@ thread_t *threading_start()
 	klog(LOG_WARN,"threading_start","Starting threading...\n");
 	thread_t *thread = malloc (sizeof (thread_t));
 	thread->tid = thread_id++;
-  	
 	current_thread = thread;
-  	kmain_thread = thread;
 	return thread;
 }
 void thread_switch (thread_t *next)
@@ -56,6 +53,5 @@ void thread_switch (thread_t *next)
 
 void thread_switchkernel()
 {
-	klog(LOG_WARN,"thread_switchkernel","Switching back to kernel thread...\n");
-	thread_switch(kmain_thread);
+	klog(LOG_WARN,"thread_switchkernel","Switching back to kernel thread... (UNIMPLEMENTED)\n");
 }

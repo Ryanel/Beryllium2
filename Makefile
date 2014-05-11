@@ -27,7 +27,7 @@ CPP:=clang++
 C_OPTIONS := -ffreestanding -std=gnu99 -nostartfiles -nostdinc
 C_OPTIONS += -Wall -Wextra -Wno-unused-function -Wno-unused-parameter
 C_OPTIONS += -Wno-unused-function -Wno-unused-parameter 
-C_OPTIONS += -O3 -ffast-math -fno-omit-frame-pointer
+C_OPTIONS += -fno-omit-frame-pointer -g
 #C_OPTIONS += -fstack-protector-all
 LD := ./toolkit/binutils/bin/i586-elf-ld -m elf_i386
 LFLAGS :=
