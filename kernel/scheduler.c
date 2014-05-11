@@ -16,18 +16,25 @@ void scheduler_update()
 	{
 		return;
 	}
-	
 	tcurrent = tcurrent->next;
 	if(tcurrent == NULL)
 	{
+		printf("Looping...\n");
 		tcurrent = tqueue;
 	}
 	printf("thread: Launching 0x%X\n",tcurrent->thread);
+	if(tcurrent->thread == NULL)
+	{
+		klog(LOG_WARN,"scheduler","Tried to execute a null thread, trying again!\n");
+		scheduler_update();
+		return;
+	}
 	thread_switch(tcurrent->thread);
 }
 
 void scheduler_add_thread(thread_t * thread)
 {
+	printf("Adding thread...\n");
 	tlist_t * thread_item = (tlist_t*)malloc(sizeof(tlist_t));
 	
 	thread_item->thread = thread;
@@ -49,15 +56,15 @@ void scheduler_add_thread(thread_t * thread)
 		}
 	}
 	test->next = thread_item;
+	scheduler_state = 1;
 }
 
 void scheduler_init(thread_t * kernel_thread)
 {
-	klog(LOG_WARN,"scheduler_init","Starting scheduler...\n");
+	klog(LOG_INFO,"scheduler_init","Starting scheduler...\n");
 	tqueue = (tlist_t*)malloc(sizeof(tlist_t));
 	tqueue->next = NULL;
 	tqueue->thread = kernel_thread;
 	tcurrent = tqueue;
-	scheduler_state = 1;
 	timing_register_timer("scheduler_update",5,scheduler_update, 5);
 }

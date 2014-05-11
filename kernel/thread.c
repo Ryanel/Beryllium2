@@ -10,6 +10,7 @@ thread_t * kmain_thread;
 void thread_exit()
 {
 	klog(LOG_WARN,"thread_exit","Thread exiting!\n");
+	scheduler_update();
 	while(true)
 	{
 		
@@ -24,9 +25,10 @@ thread_t * thread_create(uint8_t level,uint32_t pid, int (*fn)(void*))
 	thread->level = level;
 	thread->owner_pid = pid;
 	thread->stack = malloc(0x1000);
+	memset (thread->stack, 0, 0x1000);
 	uint32_t * stack_ptr = thread->stack + 0x500;
 	*--stack_ptr = (uint32_t)&thread_exit; // Fake return address.
-	*--stack_ptr = (uint32_t)&fn;
+	*--stack_ptr = (uint32_t)fn;
 	*--stack_ptr = 0; // Fake EBP.
 
 	thread->ebp = (uint32_t)stack_ptr;

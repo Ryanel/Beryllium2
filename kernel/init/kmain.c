@@ -28,11 +28,14 @@ void kshell_parse_char(char);
 char kb_read();
 void device_manager_start();
 
-void hello()
+void a()
 {
-	klog(LOG_INFO,"hello_world","Hello, world!\n");
+	printf("A\n");
 }
-
+void b()
+{
+	printf("B\n");
+}
 /**
 Kernel main function
 **/
@@ -50,10 +53,8 @@ void kmain()
 	klog(LOG_INFO,"kmain","Kernel took %dms to become fully operational!\n",timer_getHi());
 	
 	initrd_init();
-	threading_start();
-	thread_t * test = thread_create(0,0, hello);
-	scheduler_init(test);
-	
+	scheduler_init(threading_start());
+	scheduler_add_thread(thread_create(0,0, a));
 	klog(LOG_PANIC,"init","No init found. Dropping login\n");
 	while(true)
 	{
