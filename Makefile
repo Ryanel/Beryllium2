@@ -21,6 +21,9 @@ KERNEL_FILES := $(patsubst %.c,%.o,$(wildcard kernel/*.c))
 ARCH_FILES := $(patsubst %.c,%.o,$(wildcard ${ARCH_DIRECTORY}/*.c))
 FS_FILES := $(patsubst %.c,%.o,$(wildcard kernel/fs/*.c))
 SRC_FILES := ${BOOT_FILES} ${KERNEL_FILES} ${DRIVER_FILES} ${LIB_FILES} ${ARCH_FILES} ${ARCH_BOOT_FILES} ${ARCH_LOW_FILES} ${ARCH_LIB_FILES} ${ARCH_DRIVER_FILES} ${FS_FILES}
+
+KASM_FILES := $(patsubst %.s,%.o,$(wildcard kernel/ports/assembly/*.s))
+
 #Compiler Options
 CC:=clang -DX86 -target i586-elf
 CPP:=clang++
@@ -34,7 +37,7 @@ LFLAGS :=
 LD_SCRIPT := ${ARCH_DIRECTORY}/link.ld
 INCLUDE_DIR := "./kernel/includes"
 CROSS_CLANG := -target i586-elf
-ASM := nasm -f elf 
+ASM := nasm -felf 
 GENISO := xorriso -as mkisofs
 #Rules
 .PHONY: iso clean
@@ -59,10 +62,16 @@ drivers: ${DRIVER_FILES}
 arch-drivers: ${ARCH_DRIVER_FILES}
 
 fs: ${FS_FILES}
+	
 kernel: arch-boot boot lib drivers arch-files arch-low arch-lib arch-drivers fs ${KERNEL_FILES}
 	@echo " LD [K]| kernel.elf"
 	@${LD} ${LFLAGS} -T ${LD_SCRIPT} -o ${BUILD_DIRECTORY}/kernel.elf ${SRC_FILES}
 
+asm-src: ${KASM_FILES}
+
+kernel-asm: asm-src
+	@echo " LD [K]| kernel.elf [ASSEMBLY BUILD]"
+	@${LD} ${LFLAGS} -T kernel/ports/assembly/link.ld -o ${BUILD_DIRECTORY}/kernel-asm.elf ${KASM_FILES}
 #Generic
 
 %.o: %.s
