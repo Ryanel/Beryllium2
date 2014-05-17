@@ -117,3 +117,5 @@ integrator-cp:
 	@make build-dir kernel gen-symbols add-symbols ARCH=arm/integrator-cp ASM=arm-none-eabi-as LD="arm-none-eabi-gcc -lgcc -nostartfiles -fno-builtin -nostartfiles" LFLAGS="" CC="arm-none-eabi-gcc -DARM"
 run-arm:
 	@qemu-system-arm -m 8 -serial stdio -kernel ${BUILD_DIRECTORY}/kernel.elf
+run-asm:
+	@qemu-system-i386 -m 8 -serial stdio -kernel ${BUILD_DIRECTORY}/kernel-asm.elf

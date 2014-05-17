@@ -87,7 +87,6 @@ void x86_early(int magic,multiboot_info_t *mboot)
 	memory_init();
 	//Populate Modules List
 	modloader_init();
-	
 	pit_init();
 	kmain();
 }

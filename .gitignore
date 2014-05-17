@@ -24,7 +24,7 @@ toolkit/cross/*
 toolkit/bin/*
 toolkit/gcc/*
 doc/*
-kernel.elf
+*.elf
 toolkit/arm-2008q3/
 libiconv*
 .DS_Store

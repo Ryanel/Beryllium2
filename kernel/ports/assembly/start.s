@@ -12,7 +12,7 @@
 ; Includes
 ;------------------------------------------------------------------------------
 
-%include "kernel/ports/assembly/console.inc"
+%include "kernel/ports/assembly/includes.inc"
 
 ;------------------------------------------------------------------------------
 ; Multiboot Header
@@ -48,27 +48,6 @@ stack_top:
 
 section .text
 ;------------------------------------------------------------------------------
-; halt
-; Halts the processor.
-; TODO: Move to error.s
-;------------------------------------------------------------------------------
-halt:
-	cli
-	hlt
-	jmp halt
-;------------------------------------------------------------------------------
-; multiboot_fail
-; Called if initialising multiboot failed 
-; TODO: Move to error.s
-;------------------------------------------------------------------------------
-multiboot_fail:
-	cmp edx, 1
-	je multiboot_fail_magic
-	;cmp edx, 2 ;Cont...
-multiboot_fail_magic:
-	;mov edx, {NAME OF STRING}
-	jmp halt
-;------------------------------------------------------------------------------
 ; start
 ; The entry point of the kernel
 ;------------------------------------------------------------------------------
@@ -82,9 +61,9 @@ start: ; Entry Point
 	jne multiboot_fail
 	
 	;We passed, lets print a welcome message
-	mov esi, bootmsg
-	call vga_prints
-	call vga_test
+	call vga_clearscreen
+	Print bootmsg
+	call vga_printregs
 	call halt
 	
-bootmsg: db "Beryllium2 Kernel Version 0.0.0.1(0.0.0.5)-[port:asm]",13, 0
+bootmsg: db "Beryllium2 Kernel Version 0.0.0.1(0.0.0.5)-[port:asm]",0xA, 0x0
