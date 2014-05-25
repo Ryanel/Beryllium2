@@ -98,6 +98,10 @@ void arm4_xrq_handler(uint32_t lr, uint32_t type)
 			t0mmio[REG_INTCLR] = 1;			/* according to the docs u can write any value */
 			timer_recieveTick(0x2);
 		}
+		else
+		{
+			
+		}
 		return;
 	}
 	// Is this a software interrupt?

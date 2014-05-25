@@ -2,9 +2,7 @@
 #include <types.h>
 #include <beryllium/video.h>
 #include <beryllium/video_font.h>
-#ifdef X86
-#include <x86/ports.h>http://www.asciitable.com/index/asciifull.gif
-#endif
+#include <log.h>
 uint32_t term_x = 0;
 uint32_t term_y = 0;
 
@@ -26,7 +24,7 @@ void gprintchar(char c, int x, int y)
 {
 	uint8_t row = 0;
 	uint32_t col = x * 8;
-	uint32_t ry  = y * 10;
+	uint32_t ry  = y * 9;
 	for (row = 0; row < 8; row++) {
 		
 		for (uint8_t i = 0; i < 8; i++) {
@@ -102,4 +100,5 @@ void gterminal_clear()
 void gterminal_init()
 {
 	gterminal_clear();
+	klog(LOG_INFO,"gterminal","Graphics terminal online (should be mounted as /dev/gtty0)\n");
 }

@@ -43,10 +43,21 @@ void kmain()
 	wd_init();
 	klog(LOG_INFO,"kmain","Kernel took %dms to become fully operational!\n",timer_getHi());
 	initrd_init();
-	klog(LOG_PANIC,"init","No init found. Dropping login\n");
+	klog(LOG_PANIC,"init","No init found. Starting (fake) login\n");
 	
+	int tries = 0;
+	char *username = "root";
+	while (true)
+	{
+		printf("beryllium login:");
+		while(1)
+		{
+			wd_notify(WD_NOTIFY_KMAIN);
+		}
+	}
 	while(true)
 	{
+		
 		wd_notify(WD_NOTIFY_KMAIN);
 	}
 }

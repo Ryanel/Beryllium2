@@ -18,7 +18,7 @@ void qemu_pl110_write(int x, int y,uint8_t r,uint8_t g,uint8_t b)
 void qemu_pl110_clear()
 {
 	for (int x = 0; x < (640 * 480) - 10; ++x)
-		qemu_pl110_write_index(x,0x1,0x1,0x1);
+		qemu_pl110_write_index(x,0x0,0x0,0x0 + (x % 640 * 480));
 }
 void qemu_pl110_test()
 {
