@@ -3,7 +3,7 @@
 #include <beryllium/video.h>
 #include <beryllium/video_font.h>
 #ifdef X86
-#include <x86/ports.h>
+#include <x86/ports.h>http://www.asciitable.com/index/asciifull.gif
 #endif
 uint32_t term_x = 0;
 uint32_t term_y = 0;

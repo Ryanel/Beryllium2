@@ -17,7 +17,7 @@ void arm_integrator_cp_early()
 	gterminal_init();
 	serial_print_header("Integrator-CP","ARM4");
 	printf("Beryllium%c Kernel Version %s-%s built %s %s\n",253,SYSTEM_VERSION,SYSTEM_RELEASE,__DATE__,__TIME__);
-	klog(LOG_INFO,"x86_early","Loading early enviroment platform for the ARM4 processor\n");
+	klog(LOG_INFO,"x86_early","Loading early enviroment platform for the %s\n", ARCH_STRING);
 	klog(LOG_INFO,"arm_uart","Logging up on ARM (via. UART0)\n");
 	uint32_t pc;
 	asm("ldrh   %0, [pc, #6]" :"=r"(pc) : : "memory");
