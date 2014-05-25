@@ -38,14 +38,14 @@ void kmain()
 	//Start
 	klog(LOG_INFO,"kmain","Starting VFS\n");
 	vfs_init(); 
-	device_manager_start();
+	//device_manager_start();
 	timing_init();
-	init_vfs_devices();
+	//init_vfs_devices();
 	wd_init();
 	klog(LOG_INFO,"kmain","Kernel took %dms to become fully operational!\n",timer_getHi());
 	initrd_init();
-	klog(LOG_WARN,"kmain","Refusing to use broken threading implementation... [FIXME]\n");
 	klog(LOG_PANIC,"init","No init found. Dropping login\n");
+	
 	while(true)
 	{
 		wd_notify(WD_NOTIFY_KMAIN);

@@ -44,7 +44,7 @@ void x86_early(int magic,multiboot_info_t *mboot)
 	
 	get_x86_cpu_info();
 	
-	printf("Beryllium%c Kernel Version %s-%s:%s %s\n",253,SYSTEM_VERSION,SYSTEM_RELEASE,__DATE__,__TIME__);
+	printf("Beryllium%c Kernel Version %s-%s built %s %s\n",253,SYSTEM_VERSION,SYSTEM_RELEASE,__DATE__,__TIME__);
 	
 	klog(LOG_INFO,"x86_early","Loading early enviroment platform for the x86 processor\n");
 	

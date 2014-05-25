@@ -26,7 +26,7 @@ void scheduler_update()
 		klog(LOG_WARN,"scheduler","Tried to execute a null thread, trying again!\n");
 		return;
 	}
-	thread_switch(tcurrent->thread);
+	//thread_switch(tcurrent->thread);
 }
 
 void scheduler_add_thread(thread_t * thread)

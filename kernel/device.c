@@ -114,7 +114,6 @@ device_t * device_search(char *name)
 
 void device_manager_insert(device_t * device,device_t * parent)
 {
-	//Note, change device_tree->root to parent from device_t
 	tree_node_t * res = device_search_node(parent->name);
 	if(res == NULL)
 	{

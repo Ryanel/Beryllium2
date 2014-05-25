@@ -30,7 +30,7 @@ void video_printchar(int x,int y, unsigned char c)
 	#ifdef X86
 	textmode_write(x,y,c);
 	#else
-	//gterminal_draw_char(x, y, c);
+	//gprintchar(x, y, c);
 	#endif
 }
 
@@ -98,7 +98,7 @@ void video_draw_pixel(int x, int y, uint8_t r,uint8_t g,uint8_t b)
 	#ifdef X86
 
 	#else
-	//qemu_pl110_write(x,y,r,g,b);
+	qemu_pl110_write(x,y,r,g,b);
 
 	#endif
 }
