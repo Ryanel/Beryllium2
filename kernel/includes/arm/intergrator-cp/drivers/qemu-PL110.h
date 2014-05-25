@@ -16,6 +16,6 @@ typedef struct _PL110MMIO
 	uint32_t	volatile g;		//18
 	uint32_t	volatile control;	//1c
 } pl110_mmio_t;
-void qemu_pl110_write_index(int index,uint8_t r,uint8_t g,uint8_t b);
+void qemu_pl110_write_index(uint32_t index,uint8_t r,uint8_t g,uint8_t b);
 void qemu_pl110_write(int x, int y,uint8_t r,uint8_t g,uint8_t b);
 #endif

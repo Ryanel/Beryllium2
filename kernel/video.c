@@ -8,11 +8,23 @@ void textmode_clear();
 #include <arm/intergrator-cp/drivers/qemu-PL110.h>
 #endif
 
-int video_device = 0; //Textmode x86
+int video_device = 0; //Textmode x86, Graphics
 int video_graphics_init() //returns 0 if failed, 1 if sucessfull
 {
 	//bga_init();
 	return 0;
+}
+
+void video_prints(char *c)
+{
+	if(video_device == 0)
+	{
+		print(c);
+	}
+	else
+	{
+		//gprint(c);
+	}
 }
 
 int video_graphics_capable()
@@ -30,7 +42,7 @@ void video_printchar(int x,int y, unsigned char c)
 	#ifdef X86
 	textmode_write(x,y,c);
 	#else
-	//gprintchar(x, y, c);
+	gprintchar(c,x,y);
 	#endif
 }
 
@@ -49,6 +61,7 @@ void video_printstring(int x,int y, char *c)
 		video_printchar(x + i, y ,c[i]);
 		i++;
 	}
+	
 }
 void video_printcoloredstring(int x,int y,unsigned char attribute, char *c)
 {
@@ -77,6 +90,8 @@ void video_clear()
 {
 	#ifdef X86
 	textmode_clear();
+	#else
+	qemu_pl110_clear();
 	#endif
 }
 

@@ -297,7 +297,12 @@ You must write your own putchar()
 *****************************************************************************/
 int vprintf_help(unsigned c, void **ptr)
 {
+	#ifdef X86
 	printc(c);
+	#endif
+	#ifdef ARM
+	gprintc(c);
+	#endif
 	#ifdef LOG_SERIAL
 	#ifdef ENABLE_SERIAL
 	serial_write(c);

@@ -34,7 +34,6 @@ Kernel main function
 void kmain()
 {
 	klog(LOG_INFO,"kmain","Booted into kernel proper.\n");
-	
 	//Start
 	klog(LOG_INFO,"kmain","Starting VFS\n");
 	vfs_init(); 

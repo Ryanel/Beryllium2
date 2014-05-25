@@ -5,8 +5,8 @@
 #ifdef X86
 #include <x86/ports.h>
 #endif
-volatile uint32_t term_x = 0;
-volatile uint32_t term_y = 0;
+uint32_t term_x = 0;
+uint32_t term_y = 0;
 
 ///
 ///Determines if the screen needs to be scrolled, and scrolls.
@@ -17,19 +17,20 @@ void gscroll()
 	if(term_y >= 25)
 	{
 		video_scroll(0,24);
-		term_y = 24;
+		term_y = 0;
+		gterminal_clear();
 	}
 }
 
-void gprintchar(unsigned char c, int x, int y)
+void gprintchar(char c, int x, int y)
 {
 	uint8_t row = 0;
-	uint8_t col = x * 8;
-	uint8_t ry  = y * 8;
+	uint32_t col = x * 8;
+	uint32_t ry  = y * 10;
 	for (row = 0; row < 8; row++) {
 		
 		for (uint8_t i = 0; i < 8; i++) {
-			if (font8x8_basic[c][row] & (1 << i)) 
+			if (font8x8_basic[(uint8_t)c][row] & (1 << i)) 
 			{
 				video_draw_pixel(col+i,ry+row, 0xFF,0xFF,0xFF);
 			}
@@ -41,7 +42,7 @@ void gprintchar(unsigned char c, int x, int y)
 ///
 ///Better than textmode_write, it formats the output at a basic level.
 ///
-void gprintc(unsigned char c)
+void gprintc(char c)
 {
 	if (c == 0x08 && term_x) //Backspace
 	{
