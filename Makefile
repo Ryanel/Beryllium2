@@ -125,5 +125,7 @@ run-arm-icp:
 	@qemu-system-arm -M integratorcp -serial stdio -kernel ${BUILD_DIRECTORY}/kernel.elf -nographic -monitor none -initrd iso/boot/initrd.img
 run-arm-rpi:
 	@qemu-system-arm -m 8 -M versatilepb -cpu arm1176 -serial stdio -kernel ${BUILD_DIRECTORY}/kernel.elf -initrd iso/boot/initrd.img
+sparc:
+	@make ARCH=sparc ASM=sparc-elf-as LD=sparc-elf-ld CC=sparc-elf-gcc kernel-sparc
 run-asm:
 	@qemu-system-i386 -m 8 -serial stdio -kernel ${BUILD_DIRECTORY}/kernel-asm.elf
