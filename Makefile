@@ -2,7 +2,7 @@
 #Beryllium Build System
 #=================================================================================================
 ARCH :=x86
-ARCH_DIRECTORY := kernel/${ARCH}
+ARCH_DIRECTORY := kernel/arch/${ARCH}
 
 ARCH_TOOLKIT_PREFIX := 
 
@@ -18,11 +18,11 @@ ARCH_LIB_FILES := $(patsubst %.c,%.o,$(wildcard ${ARCH_DIRECTORY}/lib/*.c))
 DRIVER_FILES := $(patsubst %.c,%.o,$(wildcard kernel/drivers/*.c))
 ARCH_DRIVER_FILES  := $(patsubst %.c,%.o,$(wildcard ${ARCH_DIRECTORY}/drivers/*.c))
 KERNEL_FILES := $(patsubst %.c,%.o,$(wildcard kernel/*.c))
-ARCH_FILES := $(patsubst %.c,%.o,$(wildcard ${ARCH_DIRECTORY}/*.c))
+ARCH_FILES := $(patsubst %.c,%.o,$(wildcard ${ARCH_DIRECTORY}/*.c))$(patsubst %.s,%.o,$(wildcard ${ARCH_DIRECTORY}/*.s))
 FS_FILES := $(patsubst %.c,%.o,$(wildcard kernel/fs/*.c))
 SRC_FILES := ${BOOT_FILES} ${KERNEL_FILES} ${DRIVER_FILES} ${LIB_FILES} ${ARCH_FILES} ${ARCH_BOOT_FILES} ${ARCH_LOW_FILES} ${ARCH_LIB_FILES} ${ARCH_DRIVER_FILES} ${FS_FILES}
 
-KASM_FILES := $(patsubst %.s,%.o,$(wildcard kernel/ports/assembly/*.s))
+KASM_FILES := $(patsubst %.s,%.o,$(wildcard ${ARCH_DIRECTORY}asm/*.s))
 
 #Compiler Options
 CC:=clang -DX86 -target i586-elf
@@ -74,8 +74,8 @@ kernel-sparc: arch-boot
 asm-src: ${KASM_FILES}
 
 kernel-asm: asm-src
-	@echo " LD [K]| kernel.elf [ASSEMBLY BUILD]"
-	@${LD} ${LFLAGS} -T kernel/ports/assembly/link.ld -o ${BUILD_DIRECTORY}/kernel-asm.elf ${KASM_FILES}
+	@echo " LD [K]| kernel.elf (x86_asm)"
+	@${LD} ${LFLAGS} -T ${ARCH_DIRECTORY}asm/link.ld -o ${BUILD_DIRECTORY}/kernel-asm.elf ${KASM_FILES}
 #Generic
 
 %.o: %.s
