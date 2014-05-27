@@ -91,7 +91,9 @@ void video_clear()
 	#ifdef X86
 	textmode_clear();
 	#else
+	#ifdef ARCH_ARM_ICP
 	qemu_pl110_clear();
+	#endif
 	#endif
 }
 
@@ -113,8 +115,10 @@ void video_draw_pixel(int x, int y, uint8_t r,uint8_t g,uint8_t b)
 	#ifdef X86
 
 	#else
-	qemu_pl110_write(x,y,r,g,b);
 
+	#ifdef ARCH_ARM_ICP
+	qemu_pl110_write(x,y,r,g,b);
+	#endif
 	#endif
 }
 

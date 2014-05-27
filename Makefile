@@ -118,9 +118,9 @@ x64:
 arm:
 	@make integrator-cp
 integrator-cp:
-	@make build-dir kernel ARCH=arm/integrator-cp ASM=arm-none-eabi-as LD="arm-none-eabi-gcc -lgcc -nostartfiles -fno-builtin -nostartfiles" LFLAGS="" CC="arm-none-eabi-gcc -DARM"
+	@make build-dir kernel ARCH=arm/integrator-cp ASM=arm-none-eabi-as LD="arm-none-eabi-gcc -lgcc -nostartfiles -fno-builtin -nostartfiles -DARCH_ARM_ICP" LFLAGS="" CC="arm-none-eabi-gcc -DARM"
 rpi:
-	@make build-dir kernel gen-symbols add-symbols ARCH=arm/rpi ASM=arm-none-eabi-as LD="arm-none-eabi-gcc -lgcc -nostartfiles -fno-builtin -nostartfiles" LFLAGS="" CC="arm-none-eabi-gcc -DARM"
+	@make build-dir kernel gen-symbols add-symbols ARCH=arm/rpi ASM=arm-none-eabi-as LD="arm-none-eabi-gcc -lgcc -nostartfiles -fno-builtin -nostartfiles -DARCH_ARM_RPI" LFLAGS="" CC="arm-none-eabi-gcc -DARM"
 run-arm-icp:
 	@qemu-system-arm -M integratorcp -serial stdio -kernel ${BUILD_DIRECTORY}/kernel.elf -nographic -monitor none -initrd iso/boot/initrd.img
 run-arm-rpi:
