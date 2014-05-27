@@ -1,4 +1,4 @@
-[Beryllium^2](id:btop)
+[Beryllium2](id:btop)
 =========
 
 An actual serious attempt at a *NIX kernel; with a couple of tweaks to the old formula of course. And only the kernel.
@@ -13,15 +13,16 @@ Ports (+ = priority)
 * Raspberry Pi
 * SPARC
 * MIPS (Soon)
+
 Features
 ---------
 * IO Interrupt Messaging System
 * Dynamic Kernel Level Timers
-* Architecture independant
 * Devices (try /dev/serial0!)
 * Kernel Level Logging (minus the logging)
 * Device Tree (along with starting and stopping devices)
 * Regioned memory manager (in progress)
+* All Architecture independant
 
 On Boot
 ---------
