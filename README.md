@@ -5,15 +5,22 @@ An actual serious attempt at a *NIX kernel; with a couple of tweaks to the old f
 
 This kernel is unique in the fact that it is a macrokernel that is transitioning into a microkernel. Well, I say unique, more like "special snowflake".
 
+Ports (+ = priority)
+---------
+* x86 +
+* ARM +
+* Integrator-CP (qemu) +
+* Raspberry Pi
+* SPARC
+* MIPS (Soon)
 Features
 ---------
 * IO Interrupt Messaging System
 * Dynamic Kernel Level Timers
-* VFS (And Initial Ramdisk!)
+* Architecture independant
 * Devices (try /dev/serial0!)
 * Kernel Level Logging (minus the logging)
 * Device Tree (along with starting and stopping devices)
-* Platform independant (all arm code is in arm/ , while all x86 code is in x86).
 * Regioned memory manager (in progress)
 
 On Boot
